@@ -1,12 +1,17 @@
 package com.gnurt.fashion_ecommerce.entity;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +33,7 @@ public class Category {
 	private String categorySlug;
 	@Column(name = "category_image")
 	private String categoryImage;
+
 	@Column(name = "category_status")
 	private Boolean categoryStatus;
 	@Column(name = "category_created_date")
@@ -39,4 +45,7 @@ public class Category {
 	@Column(name = "category_updated_by")
 	private Long categoryUpdatedBy;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+	@JsonManagedReference
+	private List<Product> lstProduct;
 }

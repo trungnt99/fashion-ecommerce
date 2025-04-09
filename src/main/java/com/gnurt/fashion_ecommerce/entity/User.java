@@ -48,14 +48,16 @@ public class User {
 	private LocalDate accessTokenExpired;
 	@Column(name = "status")
 	private Boolean status;
+	@Column(name = "created_date")
+	private LocalDate createdDate;
+	@Column(name = "updated_date")
+	private LocalDate updatedDate;
+
 	@Column(name = "role_id", insertable = false, updatable = false)
 	private Long roleId;
 	@ManyToOne
 	@JoinColumn(name = "role_id")
 	@JsonBackReference
 	private Role role;
-	@Column(name = "created_date")
-	private LocalDate createdDate;
-	@Column(name = "updated_date")
-	private LocalDate updatedDate;
+
 }

@@ -12,4 +12,6 @@ public interface JWTTokenService {
 	Long getExpirationTime(String token);
 
 	String getUsernameFromToken(String token);
+
+	Boolean validateToken(String token, String username);
 }

@@ -3,6 +3,7 @@ package com.gnurt.fashion_ecommerce.service.impl;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	private JWTTokenService jwtTokenService;
 
+	private RedisTemplate<String, Object> redisTemplate;
+
 	@Override
 	public LoginResponseDTO login(String username, String password) {
 		log.info("login start");
@@ -37,6 +40,9 @@ public class AuthServiceImpl implements AuthService {
 		final String accessToken = jwtTokenService.generateAccessToken(user.getUserId(), claims);
 
 		final String refreshToken = jwtTokenService.generateRefreshToken(user.getUserId(), user.getUsername());
+		// Store user information in Redis with a TTL of 30 minutes
+		redisTemplate.opsForValue().set("user:" + user.getUserId(), user, 30 * 60);
+
 		return new LoginResponseDTO(accessToken, refreshToken);
 	}
 
@@ -48,6 +54,21 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public String refreshToken(String token) {
-		return null;
+		// add logic to refresh token
+		log.info("refreshToken start");
+		String username = jwtTokenService.getUsernameFromToken(token);
+		User user = iUserService.getByUsername(username).get();
+		if (!user.getStatus()) {
+			throw new UserNotActivatedException();
+		}
+		if (jwtTokenService.validateToken(token, username)) {
+			var claims = new HashMap<String, Object>();
+			claims.put("username", user.getUsername());
+			final String accessToken = jwtTokenService.generateAccessToken(user.getUserId(), claims);
+			return accessToken;
+		} else {
+			throw new RuntimeException("Invalid token");
+		}
+
 	}
 }

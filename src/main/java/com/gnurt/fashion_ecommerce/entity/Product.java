@@ -47,14 +47,19 @@ public class Product {
 	private String productSlug;
 	@Column(name = "product_image")
 	private String productImage;
+	@Column(name = "product_sold")
+	private Integer productSold;
+
 	@Column(name = "product_status")
 	private Boolean productStatus;
 	@Column(name = "product_created_date")
 	private LocalDate productCreatedDate;
 	@Column(name = "product_updated_date")
 	private LocalDate productUpdatedDate;
-	@Column(name = "product_sold")
-	private Integer productSold;
+	@Column(name = "product_created_by")
+	private Long productCreatedBy;
+	@Column(name = "product_updated_by")
+	private Long productUpdatedBy;
 
 	@Column(name = "brand_id", insertable = false, updatable = false)
 	private Long brandId;

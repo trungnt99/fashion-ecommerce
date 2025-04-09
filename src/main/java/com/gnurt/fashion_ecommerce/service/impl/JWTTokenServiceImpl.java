@@ -137,4 +137,12 @@ public class JWTTokenServiceImpl implements JWTTokenService {
 		}
 	}
 
+	@Override
+	public Boolean validateToken(String token, String username) {
+		log.info("validateToken start");
+		String tokenUsername = getUsernameFromToken(token);
+		return (username.equals(tokenUsername) && !isExpiredToken(token));
+
+	}
+
 }

@@ -30,6 +30,7 @@ public class Role {
 	private String roleCode;
 	@Column(name = "role_detail")
 	private String roleDetail;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
 	@JsonManagedReference
 	private List<User> lstUser;
